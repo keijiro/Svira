@@ -1,12 +1,10 @@
 using UnityEngine;
 
-namespace NNCam {
-
-public sealed class Effector : MonoBehaviour
+public sealed class Swirl : MonoBehaviour
 {
     #region Editor only attributes
 
-    [SerializeField] InputStream _inputStream = null;
+    [SerializeField] NNCam.InputStream _inputStream = null;
     [SerializeField, HideInInspector] Shader _shader = null;
 
     #endregion
@@ -86,5 +84,3 @@ public sealed class Effector : MonoBehaviour
 
     #endregion
 }
-
-} // namespace NNCam

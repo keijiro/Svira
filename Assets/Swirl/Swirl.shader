@@ -1,4 +1,4 @@
-Shader "Hidden/NNCam/Effector"
+Shader "Hidden/Svira/Swirl"
 {
     Properties
     {
