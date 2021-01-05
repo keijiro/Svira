@@ -1,4 +1,4 @@
-Shader "Hidden/Svira/SlitScanCam"
+Shader "Hidden/Svira/SlitScan"
 {
     Properties
     {
@@ -15,9 +15,11 @@ Shader "Hidden/Svira/SlitScanCam"
     float _AxisSwitch;
     float _DelayAmount;
     uint _FrameCount;
+    uint _BufferCount;
 
     float3 GetHistory(float2 uv, uint offset)
     {
+        offset = min(_BufferCount, offset);
         uint i = (_FrameCount + HISTORY - offset) & (HISTORY - 1);
         return UNITY_SAMPLE_TEX2DARRAY(_BufferTex, float3(uv, i)).rgb;
     }

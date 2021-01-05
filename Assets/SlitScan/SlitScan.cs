@@ -1,9 +1,10 @@
 using UnityEngine;
 
-class SlitScanCam : MonoBehaviour
+class SlitScan : MonoBehaviour
 {
     [SerializeField, Range(0, 1)] float _delayAmount = 0.5f;
     [SerializeField] bool _rotateAxis = false;
+    [SerializeField] bool _enableBuffer = true;
     [SerializeField, HideInInspector] Shader _shader = null;
 
     const int History = 256;
@@ -11,6 +12,7 @@ class SlitScanCam : MonoBehaviour
     Material _material;
     Texture2DArray _buffer;
     WebCamTexture _webcam;
+    int _bufferCount;
 
     void Start()
     {
@@ -25,6 +27,9 @@ class SlitScanCam : MonoBehaviour
         _webcam.Play();
     }
 
+    void Update()
+      => _bufferCount = _enableBuffer ? _bufferCount + 1 : 0;
+
     void OnPostRender()
     {
         var frame = Time.frameCount & (History - 1);
@@ -38,6 +43,7 @@ class SlitScanCam : MonoBehaviour
         _material.SetFloat("_AxisSwitch", _rotateAxis ? 0 : 1);
         _material.SetFloat("_DelayAmount", _delayAmount * 255);
         _material.SetInt("_FrameCount", frame);
+        _material.SetInt("_BufferCount", _bufferCount);
         Graphics.DrawProceduralNow(MeshTopology.Quads, 4, 1);
     }
 }
