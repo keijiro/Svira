@@ -12,8 +12,9 @@ Shader "Hidden/Svira/SlitScan"
     #define HISTORY 256
 
     UNITY_DECLARE_TEX2DARRAY(_BufferTex);
-    float _AxisSwitch;
+    float _Opacity;
     float _DelayAmount;
+    float _AxisSwitch;
     uint _FrameCount;
     uint _BufferCount;
 
@@ -40,9 +41,10 @@ Shader "Hidden/Svira/SlitScan"
     {
         float delay = lerp(uv.x, 1 - uv.y, _AxisSwitch) * _DelayAmount;
         uint offset = (uint)delay;
+        float3 p0 = GetHistory(uv, 0);
         float3 p1 = GetHistory(uv, offset + 0);
         float3 p2 = GetHistory(uv, offset + 1);
-        return float4(lerp(p1, p2, frac(delay)), 1);
+        return float4(lerp(p0, lerp(p1, p2, frac(delay)), _Opacity), 1);
     }
 
     ENDCG
