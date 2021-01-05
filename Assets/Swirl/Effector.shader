@@ -49,7 +49,7 @@ Shader "Hidden/NNCam/Effector"
         float3 camera = tex2D(_MainTex, uv).rgb;
         float4 feedback = tex2D(_FeedbackTex, uv + Displacement(uv));
 
-        float mask = smoothstep(0.9, 1, 1 - tex2D(_MaskTex, uv).r);
+        float mask = smoothstep(0.9, 1, tex2D(_MaskTex, uv).r);
 
         float alpha = lerp(feedback.a * (1 - _Feedback.y), _Feedback.x, mask);
         float3 rgb = lerp(camera, feedback.rgb, saturate(alpha) * (1 - mask));
