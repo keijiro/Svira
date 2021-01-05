@@ -1,4 +1,4 @@
-Shader "Hidden/Svira/SlitScanCam"
+Shader "Hidden/Svira/Delay"
 {
     Properties
     {
@@ -9,10 +9,9 @@ Shader "Hidden/Svira/SlitScanCam"
 
     #include "UnityCG.cginc"
 
-    #define HISTORY 256
+    #define HISTORY 64
 
     UNITY_DECLARE_TEX2DARRAY(_BufferTex);
-    float _AxisSwitch;
     float _DelayAmount;
     uint _FrameCount;
 
@@ -36,11 +35,22 @@ Shader "Hidden/Svira/SlitScanCam"
     float4 Fragment(float4 pos : SV_Position,
                     float2 uv : TEXCOORD0) : SV_Target
     {
-        float delay = lerp(uv.x, 1 - uv.y, _AxisSwitch) * _DelayAmount;
-        uint offset = (uint)delay;
-        float3 p1 = GetHistory(uv, offset + 0);
-        float3 p2 = GetHistory(uv, offset + 1);
-        return float4(lerp(p1, p2, frac(delay)), 1);
+        float3 acc = 0;
+
+        for (uint i = 0; i < 8; i++)
+        {
+            // Source with monochrome + contrast
+            float3 c = GetHistory(uv, i * _DelayAmount);
+
+            // Hue
+            float h = i / 8.0 * 6 - 2;
+            c *= saturate(float3(abs(h - 1) - 1, 2 - abs(h), 2 - abs(h - 2)));
+
+            // Accumulation
+            acc += c / 4;
+        }
+
+        return float4(acc, 1);
     }
 
     ENDCG

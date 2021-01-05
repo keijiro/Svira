@@ -1,12 +1,11 @@
 using UnityEngine;
 
-class SlitScanCam : MonoBehaviour
+class Delay : MonoBehaviour
 {
     [SerializeField, Range(0, 1)] float _delayAmount = 0.5f;
-    [SerializeField] bool _rotateAxis = false;
     [SerializeField, HideInInspector] Shader _shader = null;
 
-    const int History = 256;
+    const int History = 64;
 
     Material _material;
     Texture2DArray _buffer;
@@ -35,8 +34,7 @@ class SlitScanCam : MonoBehaviour
 
         _material.SetPass(0);
         _material.SetTexture("_BufferTex", _buffer);
-        _material.SetFloat("_AxisSwitch", _rotateAxis ? 0 : 1);
-        _material.SetFloat("_DelayAmount", _delayAmount * 255);
+        _material.SetFloat("_DelayAmount", _delayAmount * 7.99f);
         _material.SetInt("_FrameCount", frame);
         Graphics.DrawProceduralNow(MeshTopology.Quads, 4, 1);
     }
