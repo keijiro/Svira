@@ -16,6 +16,7 @@ public sealed class Swirl : MonoBehaviour
     [SerializeField] float _noiseFrequency = 1;
     [SerializeField] float _noiseSpeed = 1;
     [SerializeField] float _noiseAmount = 1;
+    [SerializeField, Range(0, 1)] float _letterboxing = 0.1f;
 
     public float FeedbackLength
       { get => _feedbackLength; set => _feedbackLength = value; }
@@ -31,6 +32,9 @@ public sealed class Swirl : MonoBehaviour
 
     public float NoiseAmount
       { get => _noiseAmount; set => _noiseAmount = value; }
+
+    public float Letterboxing
+      { get => _letterboxing; set => _letterboxing = value; }
 
     #endregion
 
@@ -73,6 +77,7 @@ public sealed class Swirl : MonoBehaviour
         _material.SetTexture("_MaskTex", _inputStream.MaskTexture);
         _material.SetVector("_Feedback", FeedbackParamsVector);
         _material.SetVector("_Noise", NoiseParamsVector);
+        _material.SetFloat("_Letterbox", _letterboxing);
         Graphics.Blit(_inputStream.CameraTexture, _buffer.rt2, _material, 0);
 
         // Final blit

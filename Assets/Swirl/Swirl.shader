@@ -17,6 +17,7 @@ Shader "Hidden/Svira/Swirl"
     sampler2D _MaskTex;
     float2 _Feedback; // length, decay
     float3 _Noise;    // frequency, speed, amount
+    float _Letterbox;
 
     float2 DFNoise(float2 uv, float3 freq)
     {
@@ -48,6 +49,8 @@ Shader "Hidden/Svira/Swirl"
     {
         float3 camera = tex2D(_MainTex, uv).rgb;
         float4 feedback = tex2D(_FeedbackTex, uv + Displacement(uv));
+
+        camera *= abs(uv.y - 0.5) < 0.5 - _Letterbox / 2;
 
         float mask = smoothstep(0.9, 1, tex2D(_MaskTex, uv).r);
 
