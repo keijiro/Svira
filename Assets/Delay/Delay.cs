@@ -1,6 +1,6 @@
 using UnityEngine;
 
-class Delay : MonoBehaviour
+public sealed class Delay : MonoBehaviour
 {
     [SerializeField, Range(0, 1)] float _delayAmount = 0.5f;
     [SerializeField, HideInInspector] Shader _shader = null;

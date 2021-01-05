@@ -1,6 +1,6 @@
 using UnityEngine;
 
-class SlitScan : MonoBehaviour
+public sealed class SlitScan : MonoBehaviour
 {
     [SerializeField, Range(0, 1)] float _delayAmount = 0.5f;
     [SerializeField] bool _rotateAxis = false;
