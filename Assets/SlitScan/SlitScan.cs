@@ -7,6 +7,15 @@ public sealed class SlitScan : MonoBehaviour
     [SerializeField] bool _enableBuffer = true;
     [SerializeField, HideInInspector] Shader _shader = null;
 
+    public float DelayAmount
+      { get => _delayAmount; set => _delayAmount = value; }
+
+    public bool RotateAxis
+      { get => _rotateAxis; set => _rotateAxis = value; }
+
+    public bool EnableBuffer
+      { get => _enableBuffer; set => _enableBuffer = value; }
+
     const int History = 256;
 
     Material _material;

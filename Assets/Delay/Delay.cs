@@ -5,6 +5,9 @@ public sealed class Delay : MonoBehaviour
     [SerializeField, Range(0, 1)] float _delayAmount = 0.5f;
     [SerializeField, HideInInspector] Shader _shader = null;
 
+    public float DelayAmount
+      { get => _delayAmount; set => _delayAmount = value; }
+
     const int History = 64;
 
     Material _material;
