@@ -72,6 +72,12 @@ public sealed class Swirl : MonoBehaviour
 
     void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
+        if (_inputStream.MaskTexture == null)
+        {
+            Graphics.Blit(source, destination);
+            return;
+        }
+
         // Effector shader
         _material.SetTexture("_FeedbackTex", _buffer.rt1);
         _material.SetTexture("_MaskTex", _inputStream.MaskTexture);

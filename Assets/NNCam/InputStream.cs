@@ -43,8 +43,8 @@ sealed class InputStream : MonoBehaviour
 
     #region Public properties
 
-    public Texture CameraTexture => _webcamBuffer;
-    public Texture MaskTexture => _postprocessed;
+    public Texture CameraTexture => _webcam.ready ? _webcamBuffer : null;
+    public Texture MaskTexture => _webcam.ready ? _postprocessed : null;
 
     #endregion
 
