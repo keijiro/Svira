@@ -2,6 +2,7 @@ using UnityEngine;
 
 public sealed class SlitScan : MonoBehaviour
 {
+    [SerializeField] WebCamSelector _webcam = null;
     [SerializeField, Range(0, 1)] float _opacity = 1;
     [SerializeField, Range(0, 1)] float _delayAmount = 0.5f;
     [SerializeField] bool _rotateAxis = false;
@@ -24,7 +25,6 @@ public sealed class SlitScan : MonoBehaviour
 
     Material _material;
     Texture2DArray _buffer;
-    WebCamTexture _webcam;
     int _bufferCount;
 
     void Start()
@@ -35,9 +35,6 @@ public sealed class SlitScan : MonoBehaviour
           (1920, 1080, History, TextureFormat.RGB565, false);
         _buffer.filterMode = FilterMode.Bilinear;
         _buffer.wrapMode = TextureWrapMode.Clamp;
-
-        _webcam = new WebCamTexture();
-        _webcam.Play();
     }
 
     void Update()
@@ -45,10 +42,12 @@ public sealed class SlitScan : MonoBehaviour
 
     void OnPostRender()
     {
+        if (!_webcam.ready) return;
+
         var frame = Time.frameCount & (History - 1);
 
         var ac = RenderTexture.active;
-        Graphics.ConvertTexture(_webcam, 0, _buffer, frame);
+        Graphics.ConvertTexture(_webcam.texture, 0, _buffer, frame);
         RenderTexture.active = ac;
 
         _material.SetPass(0);

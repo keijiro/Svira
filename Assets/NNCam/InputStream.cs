@@ -13,6 +13,7 @@ sealed class InputStream : MonoBehaviour
 
     #region Editable attributes
 
+    [SerializeField] WebCamSelector _webcam = null;
     [SerializeField] Architecture _architecture = Architecture.MobileNetV1;
     [SerializeField] Unity.Barracuda.NNModel _model = null;
     [SerializeField, HideInInspector] ComputeShader _preprocessor = null;
@@ -32,7 +33,6 @@ sealed class InputStream : MonoBehaviour
 
     #region Internal objects
 
-    WebCamTexture _webcamRaw;
     RenderTexture _webcamBuffer;
     ComputeBuffer _preprocessed;
     RenderTexture _postprocessed;
@@ -52,14 +52,11 @@ sealed class InputStream : MonoBehaviour
 
     void Start()
     {
-        _webcamRaw = new WebCamTexture();
         _webcamBuffer = new RenderTexture(1920, 1080, 0);
         _preprocessed = new ComputeBuffer(Width * Height * 3, sizeof(float));
         _postprocessed = Util.NewSingleChannelRT(1920, 1000);
         _postprocessor = new Material(_postprocessShader);
         _worker = ModelLoader.Load(_model).CreateWorker();
-
-        _webcamRaw.Play();
     }
 
     void OnDisable()
@@ -73,7 +70,6 @@ sealed class InputStream : MonoBehaviour
 
     void OnDestroy()
     {
-        if (_webcamRaw != null) Destroy(_webcamRaw);
         if (_webcamBuffer != null) Destroy(_webcamBuffer);
         if (_postprocessed != null) Destroy(_postprocessed);
         if (_postprocessor != null) Destroy(_postprocessor);
@@ -81,14 +77,13 @@ sealed class InputStream : MonoBehaviour
 
     void Update()
     {
-        // Do nothing if there is no update on the webcam.
-        if (!_webcamRaw.didUpdateThisFrame) return;
+        if (!_webcam.ready) return;
 
         // Input buffer update
-        var vflip = _webcamRaw.videoVerticallyMirrored;
+        var vflip = false;
         var scale = new Vector2(1, vflip ? -1 : 1);
         var offset = new Vector2(0, vflip ? 1 : 0);
-        Graphics.Blit(_webcamRaw, _webcamBuffer, scale, offset);
+        Graphics.Blit(_webcam.texture, _webcamBuffer, scale, offset);
 
         // Preprocessing for BodyPix
         var kernel = (int)_architecture;

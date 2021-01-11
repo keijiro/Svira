@@ -2,6 +2,7 @@ using UnityEngine;
 
 public sealed class Delay : MonoBehaviour
 {
+    [SerializeField] WebCamSelector _webcam = null;
     [SerializeField, Range(0, 1)] float _delayAmount = 0.5f;
     [SerializeField, HideInInspector] Shader _shader = null;
 
@@ -12,7 +13,6 @@ public sealed class Delay : MonoBehaviour
 
     Material _material;
     Texture2DArray _buffer;
-    WebCamTexture _webcam;
 
     void Start()
     {
@@ -22,17 +22,16 @@ public sealed class Delay : MonoBehaviour
           (1920, 1080, History, TextureFormat.RGB565, false);
         _buffer.filterMode = FilterMode.Bilinear;
         _buffer.wrapMode = TextureWrapMode.Clamp;
-
-        _webcam = new WebCamTexture();
-        _webcam.Play();
     }
 
     void OnPostRender()
     {
+        if (!_webcam.ready) return;
+
         var frame = Time.frameCount & (History - 1);
 
         var ac = RenderTexture.active;
-        Graphics.ConvertTexture(_webcam, 0, _buffer, frame);
+        Graphics.ConvertTexture(_webcam.texture, 0, _buffer, frame);
         RenderTexture.active = ac;
 
         _material.SetPass(0);
