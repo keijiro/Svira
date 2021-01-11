@@ -1958,7 +1958,7 @@ MonoBehaviour:
   _noiseFrequency: 1.2
   _noiseSpeed: 0.2
   _noiseAmount: 2.3
-  _letterboxing: 0.1
+  _letterboxing: 0
 --- !u!114 &1162674740
 MonoBehaviour:
   m_ObjectHideFlags: 0
