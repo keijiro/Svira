@@ -15,5 +15,6 @@ public sealed class GuiToggle : MonoBehaviour
     void OnPerformed(InputAction.CallbackContext ctx)
     {
         _guiRoot.SetActive(!_guiRoot.activeSelf);
+        Cursor.visible = !Cursor.visible;
     }
 }
