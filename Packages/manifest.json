@@ -11,6 +11,7 @@
   "dependencies": {
     "com.unity.barracuda": "1.2.1-preview",
     "com.unity.ugui": "1.0.0",
+    "jp.keijiro.bolt.klak.base": "1.0.1",
     "jp.keijiro.bolt.minis": "1.0.1",
     "jp.keijiro.noiseshader": "1.0.0",
     "com.unity.modules.audio": "1.0.0",
